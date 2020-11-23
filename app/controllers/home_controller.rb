@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
     def index
-      @titel = 'デイトラ'
+      @article = Article.first
     end
 
     def about
