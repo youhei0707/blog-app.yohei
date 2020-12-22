@@ -5,7 +5,8 @@ class ArticlesController < ApplicationController
     @articles = Article.all
   end
 
-  def show 
+  def show
+    @comments = @article.comments 
   end
 
   def new
