@@ -1,12 +1,13 @@
 class ArticlesController < ApplicationController
-  before_action :authenticate_user!, only: [:new, :create, :edit, :update, :destroy]
+  before_action :set_article, only: %i[edit update show] # paramsの自動化
+  before_action :authenticate_user!, only: %i[new create edit update destroy]
 
   def index
     @articles = Article.all
   end
 
   def show
-    @comments = @article.comments 
+    @comments = @article.comments
   end
 
   def new
@@ -23,12 +24,12 @@ class ArticlesController < ApplicationController
     end
   end
 
-  def edit 
+  def edit
     @article = current_user.articles.find(params[:id])
   end
 
   def update
-    @article = current_user.articles.find(params[:id])
+    @articles = current_user.articles.find(params[:id])
     if @article.update(article_params)
       redirect_to article_path(@article), notice: '更新できました'
     else
@@ -38,17 +39,19 @@ class ArticlesController < ApplicationController
   end
 
   def destroy
-    article = current_user.articles.find(params[:id])
+    @articles = current_user.articles.find(params[:id])
+    article = Article.find(params[:id])
     article.destroy!
-    redirect_to root_path, notice: '削除に成功しました'
+    redirect_to root_path, notice: '削除できました'
   end
 
   private
+
   def article_params
     params.require(:article).permit(:title, :content, :eyecatch)
   end
 
-  def set_article
+  def set_article 
     @article = Article.find(params[:id])
   end
 end
